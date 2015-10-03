@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Agenda Empresarial</title>
+    </h:head>
+    <h:body>
+        <h1>Lista de Contactos</h1>
+        <h:form id="f_listaContactos">
+            <p:commandButton value="Agregar Contacto"  actionListener="#{agenda.agregarContacto()}"
+                             oncomplete="PF('dw_crear').show" update=":f_crear"/>
+            <br/><br/>
+            
+            <p:dataTable id="t_listaContactos" value="#{agenda.listaContactos}"
+                         var="contacto" rows="10" paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,50,100"
+                         currentPageReportTemplate="Contactos TOtales: {totalRecords}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Página: {currentPage} de {totalPages}"
+                         selection="#{agenda.contactoSleccionado}" selectionMode="single"
+                         rowKey="#{contacto.nombre}" resizableColumns="true" draggableColumns="true"
+                         emptyMessage="Todavia no tiene nigun Contato">
+                         
+                <p:column headerText="Nombre">
+                    <p:outputLabel value="#{contacto.nombre}"/>  
+                </p:column>
+                <p:column headerText="Telefono">
+                    <p:outputLabel value="#{contacto.telefonoPrincipal}"/>  
+                </p:column>
+                <p:column headerText="Correo">
+                    <p:outputLabel value="#{contacto.correoelectronico}"/>  
+                </p:column>
+                <p:column headerText="Direccion">
+                    <p:outputLabel value="#{contacto.direccion}"/>  
+                </p:column>
+                
+                <p:ajax event="rowDblselect" oncomplete="PF('dw_crear').show()" update=":f_ver"/>
+            </p:dataTable> 
+            <p:contextMenu for="t_listaContactos">
+                <p:menuitem value="Eliminar" actionListener="#{agenda.eliminarContacto()}"
+                            update="t_listaContactos"/>
+            </p:contextMenu>
+                            
+        </h:form>
+        <h:form id='f_crear'>
+            <p:dialog id="d_crear" widgetVar="dw_crear" modal="true"
+                      header="Agregar Nuevo Contacto">
+            <p:panelGrid columns="2">
+                <p:outputLabel value="Nombre"/>
+                <p:inputText   value="#{agenda.contacto.nombre}"/>
+                <p:outputLabel value="Telefono Principal"/>
+                <p:inputText   value="#{agenda.contacto.telefonoPrincipal}"/>
+                <p:outputLabel value="Telefono Alternativo"/>
+                <p:inputText   value="#{agenda.contacto.telefonoAlternativo}"/>
+                <p:outputLabel value="Correo Electronico"/>
+                <p:inputText   value="#{agenda.contacto.correoelectronico}"   />         
+                <p:outputLabel value="Direccion"/>
+                <p:inputText   value="#{agenda.contacto.direccion}"    />
+                
+                <p:commandButton  value="Agregar" actionListener="#{agenda.agregarContacto()}"
+                                  update=":f_listaContactos" oncomplete="PF(dw_crear).hide()"/>
+                <p:commandButton  value="Cancelar" oncomplete="PF(dw_crear).hide()"/>
+              </p:panelGrid>
+            </p:dialog>     
+        </h:form>
+        
+        <h:form id='f_ver'>
+            <p:dialog id="d_ver" widgetVar="dw_ver" modal="true"
+                      header="Contacto">
+            <p:panelGrid columns="2">
+                <p:outputLabel value="Nombre"/>
+                <p:inputText   value="#{agenda.contactoSleccionado.nombre}"/>
+                <p:outputLabel value="Telefono Principal"/>
+                <p:inputText   value="#{agenda.contactoSleccionado.telefonoPrincipal}"/>
+                <p:outputLabel value="Telefono Alternativo"/>
+                <p:inputText   value="#{agenda.contactoSleccionado.telefonoAlternativo}"/>
+                <p:outputLabel value="Correo Electronico"/>
+                <p:inputText   value="#{agenda.contactoSleccionado.correoelectronico}"  />          
+                <p:outputLabel value="Direccion"/>
+                <p:inputText   value="#{agenda.contactoSleccionado.direccion}"    />
+                
+                <p:commandButton  value="Aceptar" actionListener="#{agenda.actualizarContacto()}"
+                                  update=":f_listaContactos" oncomplete="PF(dw_ver).hide()"/>
+                
+              </p:panelGrid>
+            </p:dialog>     
+        </h:form>
+        
+            
+            <!--        <h:form>
+                        <p:outputLabel value="Ingrese su nombre: "/>
+                        <p:inputText value="#{holaMundo.nombre}"/>
+                        <p:commandButton value="Ingresar" 
+                                         actionListener="#{holaMundo.saludar()}"
+                                         update="saludo"/> 
+                        <br/>
+                        <p:outputLabel id="saludo" value="#{holaMundo.saludo}"/>
+                    </h:form>
+                    <br />
+                    <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />-->
+    </h:body>
+</html>
+
